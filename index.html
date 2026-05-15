@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تقييم لاعبي أكاديمية مواهب الباحة</title>
     
-    <!-- مكتبات التقاط الشاشة وتحويلها إلى PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
@@ -15,7 +14,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--light-blue); color: var(--text-dark); padding: 15px; }
         
-        /* شاشة تسجيل الدخول */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--primary-blue); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
         .login-box { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 15px; text-align: center; backdrop-filter: blur(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .login-box img { max-width: 120px; margin-bottom: 20px; border-radius: 10px; background: white; padding: 5px; }
@@ -23,7 +21,6 @@
         .login-btn { padding: 12px 30px; background-color: white; color: var(--primary-blue); border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; width: 100%; max-width: 250px; transition: 0.3s; }
         #errorMsg { color: #ff8a8a; margin-top: 15px; display: none; font-weight: bold; }
 
-        /* تنسيقات صفحة التقييم */
         .container { background-color: var(--white); max-width: 800px; margin: 0 auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         header { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-blue); }
         .logo { max-width: 100px; margin-bottom: 10px; }
@@ -38,7 +35,6 @@
         .action-buttons { max-width: 800px; margin: 20px auto; text-align: center; }
         .btn-primary { background-color: var(--primary-blue); color: var(--white); border: none; padding: 15px 25px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; width: 100%; cursor: pointer; }
 
-        /* تنسيقات خاصة لملف PDF لتحسين المظهر ومنع القص */
         .pdf-mode {
             width: 794px !important; 
             padding: 40px !important; 
@@ -52,15 +48,10 @@
 </head>
 <body>
 
-    <script>
-        // الرابط المباشر الدائم للصورة من مستودعك
-        const logoUrl = "https://raw.githubusercontent.com/musicar5/mwaheb/main/logo.jpeg";
-    </script>
-
-    <!-- شاشة تسجيل الدخول -->
     <div id="loginScreen">
         <div class="login-box">
-            <script>document.write(`<img src="${logoUrl}" alt="شعار الأكاديمية">`);</script>
+            <!-- استخدام المسار المحلي المباشر للصورة -->
+            <img src="logo.jpeg" alt="شعار الأكاديمية">
             <h2 style="margin-bottom: 10px;">أكاديمية مواهب الباحة</h2>
             <p style="margin-bottom: 20px;">النظام الخاص بالمدربين</p>
             <input type="password" id="passInput" class="login-input" placeholder="أدخل كلمة المرور">
@@ -70,10 +61,10 @@
         </div>
     </div>
 
-    <!-- بطاقة التقييم -->
     <div id="evaluation-card" class="container">
         <header>
-            <script>document.write(`<img src="${logoUrl}" alt="شعار الأكاديمية" class="logo">`);</script>
+            <!-- استخدام المسار المحلي المباشر للصورة -->
+            <img src="logo.jpeg" alt="شعار الأكاديمية" class="logo">
             <h1>تقييم الأداء الفني للاعبين</h1>
         </header>
 
@@ -123,7 +114,6 @@
         </form>
     </div>
 
-    <!-- أزرار التحكم -->
     <div class="action-buttons">
         <button id="exportPdfBtn" class="btn-primary">تصدير (PDF) والمشاركة 📤</button>
     </div>
@@ -155,11 +145,10 @@
             const playerName = document.getElementById('playerName').value;
             const fileName = `تقييم_${playerName}.pdf`;
 
-            // إضافة كلاس التصدير لتجميد العرض وضبط المقاسات
             element.classList.add('pdf-mode');
 
             try {
-                // التقاط الصورة بجودة عالية مع السماح بالصور الخارجية
+                // التقاط الصورة والسماح بالصور المحلية
                 const canvas = await html2canvas(element, {
                     scale: 2, 
                     useCORS: true,
@@ -168,10 +157,8 @@
                     backgroundColor: '#ffffff'
                 });
 
-                // إزالة كلاس التصدير
                 element.classList.remove('pdf-mode');
 
-                // تحويل الصورة إلى PDF بنسبة وتناسب
                 const imgData = canvas.toDataURL('image/jpeg', 1.0);
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({
@@ -188,7 +175,6 @@
                 const pdfBlob = pdf.output('blob');
                 const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
                 
-                // مشاركة الملف بدون نصوص ليتناسب مع الواتساب
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({ files: [file] });
                 } else {
